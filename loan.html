@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>loan</title>
+    <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="./select.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="./buttons.dataTables.css">
+
+
+
+    <script type="text/javascript" charset="utf8" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="./dataTables.buttons.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="./dataTables.select.js"></script>
+    <style>
+        .dt-buttons{
+            padding: 20px 0px;/*按钮与表格之间的距离*/
+        }
+    </style>
+</head>
+<body>
+<div id="table_contain">
+    <table id="myDataTable" class="cell-border stripe hover" /><!--class中是datatables中自带的表格样式属性，具体参照http://www.datatables.club/manual/styling/classes.html-->
+</div>
+
+
+</table>
+<script>
+    var myData = [
+        {id: 0, 'name': 'lucy', 'age': 12, 'hobby': 'swimming'},
+        {id: 0, 'name': 'lily', 'age': 19, 'hobby': 'singing'},
+        {id: 0, 'name': 'jone', 'age': 17, 'hobby': 'playing'},
+        {id: 0, 'name': 'jack', 'age': 16, 'hobby': 'jumping'},
+        {id: 0, 'name': 'marry', 'age': 14, 'hobby': 'writing'},
+        {id: 0, 'name': 'lucy', 'age': 12, 'hobby': 'swimming'},
+        {id: 0, 'name': 'lily', 'age': 19, 'hobby': 'singing'},
+        {id: 0, 'name': 'jone', 'age': 17, 'hobby': 'playing'},
+        {id: 0, 'name': 'jack', 'age': 16, 'hobby': 'jumping'},
+        {id: 0, 'name': 'marry', 'age': 14, 'hobby': 'writing'},
+        {id: 0, 'name': 'lucy', 'age': 12, 'hobby': 'swimming'},
+        {id: 0, 'name': 'lily', 'age': 19, 'hobby': 'singing'},
+        {id: 0, 'name': 'jone', 'age': 17, 'hobby': 'playing'},
+        {id: 0, 'name': 'jack', 'age': 16, 'hobby': 'jumping'},
+        {id: 0, 'name': 'marry', 'age': 14, 'hobby': 'writing'}
+     ];//给表格增添数据
+    var language = {
+        "aProcessing": "处理中....",
+        "sSearch": "搜索"
+    };//将表格中的英文汉化
+    let table = $('#myDataTable').DataTable({//初始化表格
+        // columnDefs: [ {
+        //     orderable: false,
+        //     className: 'select-checkbox',
+        //     targets:   0
+        // } ],  给选中的列增加默认样式
+        dom: 'frtBp',//按钮显示的位置 具体参考：http://www.datatables.club/extensions/buttons/
+        select: {
+            style: 'multi',//表示多选 具体参照 https://datatables.net/extensions/select/examples/initialisation/multi.html
+            selector: 'td:first-child'
+        },
+        buttons: [//使用Bootstrap自带的按钮，需要先下载，然后在头部引入css和js,具体下载地址：https://datatables.net/download/packages
+            //按钮的选择，具体参照：https://datatables.net/extensions/select/examples/initialisation/buttons.html
+            {
+                extend:'selectAll',
+                text:'全选',//按钮的中文名字
+            },
+            {
+              extend:'selectNone',
+              text:'不全选',
+            },
+            {
+                extend: 'selected',
+                text: '提交',
+                action: function ( e, dt, button, config ) {//当点击提交按钮的时候执行的方法
+                    //e:点击事件  dt:所有的行
+                    console.log(button);
+                    let selectedData = dt.rows( { selected: true } ).data();
+                    let data = [];
+                    $.each(selectedData, function (index, item) {
+                        let _item = {};
+                        _item.id = item.id;
+                        _item.name = item.name;
+                        data.push(_item)
+                    });
+                    let myJson = {};
+                    myJson.data = data;
+                    console.log(myJson, JSON.stringify(myJson))
+                }
+            }
+        ],//将选中的数据可以传给后台（.name数据）如果是数组就传data,如果是JSON就传JSON.stringify(myJson)
+        data: myData,//绑定数据
+        language: language,
+        paging: false,//取消分页
+        scrollY: '300px',//表格设置固定的高度，带滚动
+        info: false,//不显示左下角的信息
+        columns: [
+            {
+                defaultContent: '',
+                className:'select-checkbox',
+                orderable:false
+            },
+            {
+                title: '姓名',
+                data: 'name',
+                searchable: false
+
+            },
+            {
+                title: '年龄',
+                data: 'age'
+            },
+            {
+                title: '爱好',
+                data: 'hobby'
+            }
+        ]
+    })
+
+</script>
+</body>
+</html>
